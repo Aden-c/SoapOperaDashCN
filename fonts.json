@@ -1,0 +1,40 @@
+{
+  "_说明": "《美女肥皂剧》(Soap Opera Dash) 字体项目。用法：python fonttool/fonttool.py build -p fonts.json。路径相对于本文件。",
+  "game_assets": "../Game Files/assets",
+  "charset": "charset.txt",
+  "build_dir": "build",
+  "fallback": ["%LOCALAPPDATA%/Microsoft/Windows/Fonts/HarmonyOS_Sans_SC_Regular.ttf"],
+  "preview_text": "美女肥皂剧 开始游戏 重新开始 返回 设置 BACK 12345",
+  "fonts": {
+    "正文": {
+      "_用途": "style.lua 的 TextFont（正文、帮助、教程、对白）。原版 avenir 已被早期 Font Maker 版覆盖，没有原版可对齐",
+      "source": "%LOCALAPPDATA%/Microsoft/Windows/Fonts/HarmonyOS_Sans_SC_Regular.ttf",
+      "original": null,
+      "zero_space": true,
+      "install_as": ["font/avenirltstdmedium.mvec"]
+    },
+    "标题": {
+      "_用途": "TitleFont（帮助页标题、面板标题、主菜单牌子）",
+      "source": "../Game Files/pfp/参考字体/寒蝉团圆圆2.7/ChillReunion_Round.otf",
+      "original": "backup/highlanderstdbolditalic.mvec",
+      "zero_space": true,
+      "install_as": ["font/highlanderstdbolditalic.mvec"]
+    },
+    "按钮": {
+      "_用途": "ButtonFont / NumberFont（按钮、分数）。保留原版英文和数字，只补中文并放大",
+      "source": "%LOCALAPPDATA%/Microsoft/Windows/Fonts/JinzisheZhenhao-Bold.otf",
+      "original": "backup/florastdbold.mvec",
+      "keep_latin": true,
+      "cjk_scale": 1.07,
+      "zero_space": true,
+      "install_as": ["font/florastdbold.mvec", "font/florastd-bold.mvec"]
+    },
+    "漫画": {
+      "_用途": "ComicFont（剧情漫画气泡，需漫画走 PNG+XML 回退模式）",
+      "source": "../Game Files/pfp/参考字体/站酷快乐体3.53/站酷快乐体 开源版.ttf",
+      "original": "backup/domcasualstd.mvec",
+      "zero_space": true,
+      "install_as": ["font/domcasualstd.mvec"]
+    }
+  }
+}

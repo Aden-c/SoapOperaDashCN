@@ -1,0 +1,24 @@
+# ---- 原版游戏资源（版权属于 PlayFirst / Bamtang，不可上传）----
+backup/
+en.json
+校对表*.xlsx
+logo/*
+!logo/*.py
+!logo/logo_blank.png
+!logo/logo_cn.png
+
+# ---- 生成物 ----
+build/
+dist/
+preview/
+__pycache__/
+*.pyc
+
+# ---- 中间过程 / 已被取代 ----
+batches/
+charset_allencn.txt
+mkmvec.py
+render_mvec.py
+
+# ---- 编辑器导出的预览 ----
+*.html
