@@ -1,7 +1,7 @@
 """PlayFirst Playground 引擎 .mvec 矢量字体（MVC4）读写、转换与预览
 
 格式（逆向自原版 mvec）
-  文件头 12 字节: "MVC4" u16 字数, u16 ascent, u16 descent, u16 linegap
+  文件头 12 字节: "MVC4" u16 字数, i16 ascent, i16 descent, i16 linegap
                  （Playmate Font Maker 生成的三个度量全为 0，引擎也能用）
   字符表 每项 18 字节: u32 码位, i16 xmin xmax ymin ymax advance, u32 字形数据偏移
   字形数据（命令流）:
@@ -30,7 +30,7 @@ def read(path):
     b = open(path, 'rb').read()
     if b[:4] != b'MVC4':
         raise ValueError(f'{path} 不是 MVC4 字体')
-    n, *hdr = struct.unpack_from('<4H', b, 4)
+    n, *hdr = struct.unpack_from('<H3h', b, 4)          # 度量是有符号数（行距可能为负）
     recs = [struct.unpack_from('<I5hI', b, 12 + i * 18) for i in range(n)]
     glyphs = {}
     for k, r in enumerate(recs):
@@ -46,7 +46,7 @@ def read(path):
 def write(path, header, glyphs):
     cps = sorted(glyphs)
     off = 12 + 18 * len(cps)
-    out = bytearray(b'MVC4' + struct.pack('<4H', len(cps), *header))
+    out = bytearray(b'MVC4' + struct.pack('<H3h', len(cps), *header))
     for cp in cps:
         out += struct.pack('<I5hI', cp, *glyphs[cp][0], off)
         off += len(glyphs[cp][1])

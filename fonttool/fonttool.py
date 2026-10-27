@@ -69,13 +69,16 @@ def cmd_scan(args):
     if not fonts:
         print('没有找到 .mvec 字体。若游戏资源还在 .pfp 封包里，需要先解包。')
         return
-    srcs = {}
+    srcs, binary = {}, set()
     for f in glob.glob(os.path.join(assets, '**', '*.lua'), recursive=True) + \
              glob.glob(os.path.join(assets, '**', '*.xml'), recursive=True):
         try:
-            srcs[f] = open(f, encoding='utf-8', errors='replace').read()
+            raw = open(f, 'rb').read()
         except OSError:
-            pass
+            continue
+        if raw[:4] == b'\x1bLua' or b'\x00' in raw[:2048]:   # 编译过的 lua 字节码
+            binary.add(f)
+        srcs[f] = raw.decode('utf-8', errors='replace')
     for path in fonts:
         rel = os.path.relpath(path, assets).replace('\\', '/')
         try:
@@ -88,9 +91,15 @@ def cmd_scan(args):
             print(f'\n{rel}  无法读取: {e}'); continue
         name = os.path.basename(path)
         for f, s in srcs.items():
+            if f in binary:
+                if name in s:
+                    print(f'    {os.path.relpath(f, assets)}（编译后的 lua，无法显示原文）')
+                continue
             for m in re.finditer(re.escape(name), s):
                 line = s[s.rfind('\n', 0, m.start()) + 1:s.find('\n', m.end())].strip()
                 print(f'    {os.path.relpath(f, assets)}: {line[:100]}')
+    if binary:
+        print(f'\n注意：有 {len(binary)} 个脚本或配置文件是二进制（编译过的 lua 或压缩的 xml），界面排版不能直接改文本。')
 
 
 def nice_path(target, start):
